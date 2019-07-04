@@ -1,0 +1,19 @@
+{
+    "name": "cstopery/alipay-user-certify",
+    "description": "Laravel 5 Alipay User Package",
+    "authors": [
+        {
+            "name": "Cstopery",
+            "email": "1103321658@qq.com",
+            "homepage": "https://cstopery.com"
+        }
+    ],
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+      "psr-4": {
+        "Cstopery\\AlipayUserCertify\\": "src/"
+      }
+    }
+}
