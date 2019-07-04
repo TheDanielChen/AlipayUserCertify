@@ -158,8 +158,8 @@ class AlipayUserCertify
         $config=Config::get("AlipayUserCertify.AlipayUserCertify");
         $client = new ZmopClient($config["gatewayUrl"],$config["appId"],$config["charset"],$config["privateKeyFile"],$config["zmPublicKeyFile"]);
         $request = new ZhimaCustomerCertificationQueryRequest();
-        $request->setChannel("apppc");
-        $request->setPlatform("zmop");
+        // $request->setChannel("apppc");
+        // $request->setPlatform("zmop");
         $request->setBizNo($bizno);// 必要参数 
         $response = $client->execute($request);
         return $response;
