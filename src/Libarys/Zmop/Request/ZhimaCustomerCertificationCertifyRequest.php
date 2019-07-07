@@ -25,6 +25,7 @@ class ZhimaCustomerCertificationCertifyRequest
 	private $channel;
 	private $platform;
 	private $extParams;
+	private $certifyId;
 
 	
 	public function setBizNo($bizNo)
@@ -36,6 +37,17 @@ class ZhimaCustomerCertificationCertifyRequest
 	public function getBizNo()
 	{
 		return $this->bizNo;
+	}
+
+	public function setCertifyId($certifyId)
+	{
+		$this->certifyId = $certifyId;
+		$this->apiParas["certifyId"] = $certifyId;
+	}
+
+	public function getCertifyId()
+	{
+		return $this->certifyId;
 	}
 
 	public function setReturnUrl($returnUrl)

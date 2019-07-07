@@ -256,7 +256,30 @@ class ZmopClient {
         // $bizContent["transaction_id"] = rand(100000000000000,999999999999999);
         // $bizContent["product_code"] = "w1010100000000002978";
         // $bizContent["biz_code"] = "FACE";
-        $bizContent["identity_param"] = $request->getIdentityParam();
+
+
+    	if(!WebUtil::checkEmpty($request->getOuterOrderNo())){
+    		$bizContent["outer_order_no"] =  $request->getOuterOrderNo();
+    	}
+
+    	if(!WebUtil::checkEmpty($request->getBizCode())){
+    		$bizContent["biz_code"] =  $request->getBizCode();
+    	}
+
+    	if(!WebUtil::checkEmpty($request->getMerchantConfig())){
+    		$bizContent["merchant_config"] =  $request->getMerchantConfig();
+    	}
+
+    	if(!WebUtil::checkEmpty($request->getIdentityParam())){
+    		$bizContent["identity_param"] =  $request->getIdentityParam();
+    	}
+
+    	if(!WebUtil::checkEmpty($request->getCertifyId())){
+    		$bizContent["certify_id"] =  $request->getCertifyId();
+    	}
+
+
+        // $bizContent["identity_param"] = $request->getIdentityParam();
         return $bizContent;
     }
 

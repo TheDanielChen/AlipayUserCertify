@@ -11,6 +11,7 @@ return [
         "charset" => "UTF-8",
         //芝麻分配给商户的 appId
         "appId" => "1000000",
+        "authReturnUrl"=>"https://www.iqizu.cn",
     ],
 
     // 欺诈验证

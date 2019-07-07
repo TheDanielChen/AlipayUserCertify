@@ -160,7 +160,7 @@ class AlipayUserCertify
         $request = new ZhimaCustomerCertificationQueryRequest();
         // $request->setChannel("apppc");
         // $request->setPlatform("zmop");
-        $request->setBizNo($bizno);// 必要参数 
+        $request->setCertifyId($bizno);// 必要参数 
         $response = $client->execute($request);
         return $response;
     }
@@ -177,8 +177,8 @@ class AlipayUserCertify
         $request->setBizCode("FACE");// 必要参数 
         $request->setIdentityParam(json_encode(array("identity_type"=>"CERT_INFO","cert_type"=>"IDENTITY_CARD","cert_name"=>$name,"cert_no"=>$idcard)));
         // 必要参数 
-        $request->setMerchantConfig("{\"need_user_authorization\":\"false\"}");// 
-        $request->setExtBizParam("{}");// 必要参数 
+        $request->setMerchantConfig("{\"return_url\":\"".$config['authReturnUrl']."\"}");// 
+        // $request->setExtBizParam("{}");// 必要参数 
         $response = $client->execute($request);
         return $response;
     }
@@ -190,7 +190,7 @@ class AlipayUserCertify
         $request = new ZhimaCustomerCertificationCertifyRequest();
         // $request->setChannel("apppc");
         // $request->setPlatform("zmop");
-        $request->setBizNo($bizno);// 必要参数 
+        $request->setCertifyId($bizno);// 必要参数 
         $request->setReturnUrl($returnurl);// 必要参数 
         $url = $client->generatePageRedirectInvokeUrl($request);
         return $url;

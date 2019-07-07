@@ -57,6 +57,7 @@ need_user_authorization： 值为true或者false
 	private $channel;
 	private $platform;
 	private $extParams;
+	private $certifyId;
 
 	
 	public function setBizCode($bizCode)
@@ -68,6 +69,17 @@ need_user_authorization： 值为true或者false
 	public function getBizCode()
 	{
 		return $this->bizCode;
+	}
+
+	public function setCertifyId($certifyId)
+	{
+		$this->certifyId = $certifyId;
+		$this->apiParas["certifyId"] = $certifyId;
+	}
+
+	public function getCertifyId()
+	{
+		return $this->certifyId;
 	}
 
 	public function setExtBizParam($extBizParam)
