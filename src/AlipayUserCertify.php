@@ -4,6 +4,8 @@ namespace Cstopery\AlipayUserCertify;
 //use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Config;
 use Cstopery\AlipayUserCertify\Libarys\Zmop\ZmopClient;
+use Cstopery\AlipayUserCertify\Libarys\Zmop\AopClient;
+
 // use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaCreditScoreGetRequest;
 //use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaAuthInfoAuthorizeRequest;
 // use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaCreditWatchlistiiGetRequest;
@@ -156,6 +158,35 @@ class AlipayUserCertify
     // 支付宝认证查询
     public function ZhimaCustomerCertificationQuery($bizno){
         $config=Config::get("AlipayUserCertify.AlipayUserCertify");
+
+        $aop = new AopClient();
+        $aop->gatewayUrl = $config["gatewayUrl"];
+        $aop->appId = $config["appId"];
+        $aop->rsaPrivateKeyFilePath = $config["privateKeyFile"];
+        $aop->alipayPublicKey=$config["zmPublicKeyFile"];
+        $aop->apiVersion = '1.0';
+        $aop->signType = 'RSA2';
+        $aop->postCharset=$config["charset"];
+        $aop->format='json';
+        $request = new AlipayUserCertifyOpenQueryRequest ();
+
+        $bizCon = [
+            'certify_id'=>$bizno
+        ];
+
+        $request->setBizContent(json_encode($bizCon,true));
+        $obj = $aop->pageExecute( $request); 
+        foreach ($obj as $paraKey => $paraValue) {
+			//如果属性名以_reponse结尾，该属性对应的值为业务返回值
+			if(strrchr($paraKey, "_response") == "_response"){
+				return $paraValue;
+			}
+		}
+        return null;
+
+
+
+        $config=Config::get("AlipayUserCertify.AlipayUserCertify");
         $client = new ZmopClient($config["gatewayUrl"],$config["appId"],$config["charset"],$config["privateKeyFile"],$config["zmPublicKeyFile"]);
         $request = new AlipayUserCertifyOpenQueryRequest();
         // $request->setChannel("apppc");
@@ -168,11 +199,54 @@ class AlipayUserCertify
     // 支付宝认证初始化
     public function ZhimaCustomerCertificationInitialize($name,$idcard){
         $config=Config::get("AlipayUserCertify.AlipayUserCertify");
+
+        $aop = new AopClient();
+        $aop->gatewayUrl = $config["gatewayUrl"];
+        $aop->appId = $config["appId"];
+        $aop->rsaPrivateKeyFilePath = $config["privateKeyFile"];
+        $aop->alipayPublicKey=$config["zmPublicKeyFile"];
+        $aop->apiVersion = '1.0';
+        $aop->signType = 'RSA2';
+        $aop->postCharset=$config["charset"];
+        $aop->format='json';
+
+        $request = new AlipayUserCertifyOpenInitializeRequest();
+
+        $bizCon = [
+            'outer_order_no' => rand(100000000000000,999999999999999),
+            'biz_code' => 'FACE',
+            'identity_param'=>['identity_type'=>'CERT_INFO','cert_type'=>'IDENTITY_CARD','cert_name'=>name,'cert_no'=>idcard],
+            'merchant_config'=>['return_url'=>$config['authReturnUrl']]
+        ];
+
+
+        $request->setBizContent(json_encode($bizCon,true));
+        $obj = $aop->execute ( $request); 
+
+
+        foreach ($obj as $paraKey => $paraValue) {
+			//如果属性名以_reponse结尾，该属性对应的值为业务返回值
+			if(strrchr($paraKey, "_response") == "_response"){
+				return $paraValue;
+			}
+		}
+        return null;
+        
+
+        // old code 
+        $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
+        $resultCode = $result->$responseNode->code;
+        if(!empty($resultCode)&&$resultCode == 10000){
+            echo "成功";
+        } else {
+            echo "失败";
+        }
+
         $client = new ZmopClient($config["gatewayUrl"],$config["appId"],$config["charset"],$config["privateKeyFile"],$config["zmPublicKeyFile"]);
         $request = new AlipayUserCertifyOpenInitializeRequest();
         // $request->setChannel("apppc");
         // $request->setPlatform("zmop");
-        $request->setOuterOrderNo(rand(100000000000000,999999999999999));// 必要参数 
+        // $request->setOuterOrderNo(rand(100000000000000,999999999999999));// 必要参数 
         // $request->setProductCode("w1010100000000002978");// 必要参数 
         $request->setBizCode("FACE");// 必要参数 
         $request->setIdentityParam(json_encode(array("identity_type"=>"CERT_INFO","cert_type"=>"IDENTITY_CARD","cert_name"=>$name,"cert_no"=>$idcard)));
@@ -186,6 +260,34 @@ class AlipayUserCertify
     // 支付宝认证开始认证
     public function ZhimaCustomerCertificationCertify($bizno,$returnurl){
         $config=Config::get("AlipayUserCertify.AlipayUserCertify");
+
+        $aop = new AopClient();
+        $aop->gatewayUrl = $config["gatewayUrl"];
+        $aop->appId = $config["appId"];
+        $aop->rsaPrivateKeyFilePath = $config["privateKeyFile"];
+        $aop->alipayPublicKey=$config["zmPublicKeyFile"];
+        $aop->apiVersion = '1.0';
+        $aop->signType = 'RSA2';
+        $aop->postCharset=$config["charset"];
+        $aop->format='json';
+        $request = new AlipayUserCertifyOpenCertifyRequest ();
+
+        $bizCon = [
+            'certify_id'=>$bizno
+        ];
+
+        $request->setBizContent(json_encode($bizCon,true));
+        $obj = $aop->pageExecute( $request); 
+        foreach ($obj as $paraKey => $paraValue) {
+			//如果属性名以_reponse结尾，该属性对应的值为业务返回值
+			if(strrchr($paraKey, "_response") == "_response"){
+				return $paraValue;
+			}
+		}
+        return null;
+
+
+
         $client = new ZmopClient($config["gatewayUrl"],$config["appId"],$config["charset"],$config["privateKeyFile"],$config["zmPublicKeyFile"]);
         $request = new AlipayUserCertifyOpenCertifyRequest();
         // $request->setChannel("apppc");
