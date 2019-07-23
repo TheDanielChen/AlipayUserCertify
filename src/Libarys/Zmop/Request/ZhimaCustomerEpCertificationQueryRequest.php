@@ -1,36 +1,37 @@
 <?php
 namespace Cstopery\AlipayUserCertify\Libarys\Zmop\Request;
 /**
- * ZHIMA API: zhima.customer.ep.certification.query request
+ * ALIPAY API: zhima.customer.ep.certification.query request
  *
  * @author auto create
- * @since 1.0, 2017-07-27 20:19:37
+ * @since 1.0, 2019-01-07 20:51:15
  */
 class ZhimaCustomerEpCertificationQueryRequest
 {
 	/** 
-	 * 一次认证的唯一标识，在商户调用认证初始化接口的时候获取
+	 * 企业认证查询服务
 	 **/
-	private $bizNo;
+	private $bizContent;
 
 	private $apiParas = array();
-	private $fileParas = array();
+	private $terminalType;
+	private $terminalInfo;
+	private $prodCode;
 	private $apiVersion="1.0";
-	private $scene;
-	private $channel;
-	private $platform;
-	private $extParams;
+	private $notifyUrl;
+	private $returnUrl;
+    private $needEncrypt=false;
 
 	
-	public function setBizNo($bizNo)
+	public function setBizContent($bizContent)
 	{
-		$this->bizNo = $bizNo;
-		$this->apiParas["biz_no"] = $bizNo;
+		$this->bizContent = $bizContent;
+		$this->apiParas["biz_content"] = $bizContent;
 	}
 
-	public function getBizNo()
+	public function getBizContent()
 	{
-		return $this->bizNo;
+		return $this->bizContent;
 	}
 
 	public function getApiMethodName()
@@ -38,54 +39,59 @@ class ZhimaCustomerEpCertificationQueryRequest
 		return "zhima.customer.ep.certification.query";
 	}
 
-	public function setScene($scene)
+	public function setNotifyUrl($notifyUrl)
 	{
-		$this->scene=$scene;
+		$this->notifyUrl=$notifyUrl;
 	}
 
-	public function getScene()
+	public function getNotifyUrl()
 	{
-		return $this->scene;
-	}
-	
-	public function setChannel($channel)
-	{
-		$this->channel=$channel;
+		return $this->notifyUrl;
 	}
 
-	public function getChannel()
+	public function setReturnUrl($returnUrl)
 	{
-		return $this->channel;
-	}
-	
-	public function setPlatform($platform)
-	{
-		$this->platform=$platform;
+		$this->returnUrl=$returnUrl;
 	}
 
-	public function getPlatform()
+	public function getReturnUrl()
 	{
-		return $this->platform;
+		return $this->returnUrl;
 	}
-
-	public function setExtParams($extParams)
-	{
-		$this->extParams=$extParams;
-	}
-
-	public function getExtParams()
-	{
-		return $this->extParams;
-	}	
 
 	public function getApiParas()
 	{
 		return $this->apiParas;
 	}
-	
-	public function getFileParas()
+
+	public function getTerminalType()
 	{
-		return $this->fileParas;
+		return $this->terminalType;
+	}
+
+	public function setTerminalType($terminalType)
+	{
+		$this->terminalType = $terminalType;
+	}
+
+	public function getTerminalInfo()
+	{
+		return $this->terminalInfo;
+	}
+
+	public function setTerminalInfo($terminalInfo)
+	{
+		$this->terminalInfo = $terminalInfo;
+	}
+
+	public function getProdCode()
+	{
+		return $this->prodCode;
+	}
+
+	public function setProdCode($prodCode)
+	{
+		$this->prodCode = $prodCode;
 	}
 
 	public function setApiVersion($apiVersion)
@@ -97,5 +103,17 @@ class ZhimaCustomerEpCertificationQueryRequest
 	{
 		return $this->apiVersion;
 	}
+
+  public function setNeedEncrypt($needEncrypt)
+  {
+
+     $this->needEncrypt=$needEncrypt;
+
+  }
+
+  public function getNeedEncrypt()
+  {
+    return $this->needEncrypt;
+  }
 
 }

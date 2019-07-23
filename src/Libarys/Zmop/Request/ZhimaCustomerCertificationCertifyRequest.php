@@ -1,59 +1,57 @@
 <?php
 namespace Cstopery\AlipayUserCertify\Libarys\Zmop\Request;
 /**
- * ZHIMA API: zhima.customer.certification.certify request
+ * ALIPAY API: zhima.customer.certification.certify request
  *
  * @author auto create
- * @since 1.0, 2017-04-20 19:49:59
+ * @since 1.0, 2019-01-07 20:51:15
  */
 class ZhimaCustomerCertificationCertifyRequest
 {
 	/** 
-	 * 一次认证的唯一标识，在完成芝麻认证初始化后可以获取
+	 * 芝麻认证开始认证
 	 **/
-	private $bizNo;
-	
-	/** 
-	 * 商户回调地址，在用户完成认证后会调转回商户地址
-	 **/
-	private $returnUrl;
+	private $bizContent;
 
 	private $apiParas = array();
-	private $fileParas = array();
+	private $terminalType;
+	private $terminalInfo;
+	private $prodCode;
 	private $apiVersion="1.0";
-	private $scene;
-	private $channel;
-	private $platform;
-	private $extParams;
-	private $certifyId;
+	private $notifyUrl;
+	private $returnUrl;
+    private $needEncrypt=false;
 
 	
-	public function setBizNo($bizNo)
+	public function setBizContent($bizContent)
 	{
-		$this->bizNo = $bizNo;
-		$this->apiParas["biz_no"] = $bizNo;
+		$this->bizContent = $bizContent;
+		$this->apiParas["biz_content"] = $bizContent;
 	}
 
-	public function getBizNo()
+	public function getBizContent()
 	{
-		return $this->bizNo;
+		return $this->bizContent;
 	}
 
-	public function setCertifyId($certifyId)
+	public function getApiMethodName()
 	{
-		$this->certifyId = $certifyId;
-		$this->apiParas["certifyId"] = $certifyId;
+		return "zhima.customer.certification.certify";
 	}
 
-	public function getCertifyId()
+	public function setNotifyUrl($notifyUrl)
 	{
-		return $this->certifyId;
+		$this->notifyUrl=$notifyUrl;
+	}
+
+	public function getNotifyUrl()
+	{
+		return $this->notifyUrl;
 	}
 
 	public function setReturnUrl($returnUrl)
 	{
-		$this->returnUrl = $returnUrl;
-		$this->apiParas["return_url"] = $returnUrl;
+		$this->returnUrl=$returnUrl;
 	}
 
 	public function getReturnUrl()
@@ -61,59 +59,39 @@ class ZhimaCustomerCertificationCertifyRequest
 		return $this->returnUrl;
 	}
 
-	public function getApiMethodName()
-	{
-		return "alipay.user.certify.open.certify";
-	}
-
-	public function setScene($scene)
-	{
-		$this->scene=$scene;
-	}
-
-	public function getScene()
-	{
-		return $this->scene;
-	}
-	
-	public function setChannel($channel)
-	{
-		$this->channel=$channel;
-	}
-
-	public function getChannel()
-	{
-		return $this->channel;
-	}
-	
-	public function setPlatform($platform)
-	{
-		$this->platform=$platform;
-	}
-
-	public function getPlatform()
-	{
-		return $this->platform;
-	}
-
-	public function setExtParams($extParams)
-	{
-		$this->extParams=$extParams;
-	}
-
-	public function getExtParams()
-	{
-		return $this->extParams;
-	}	
-
 	public function getApiParas()
 	{
 		return $this->apiParas;
 	}
-	
-	public function getFileParas()
+
+	public function getTerminalType()
 	{
-		return $this->fileParas;
+		return $this->terminalType;
+	}
+
+	public function setTerminalType($terminalType)
+	{
+		$this->terminalType = $terminalType;
+	}
+
+	public function getTerminalInfo()
+	{
+		return $this->terminalInfo;
+	}
+
+	public function setTerminalInfo($terminalInfo)
+	{
+		$this->terminalInfo = $terminalInfo;
+	}
+
+	public function getProdCode()
+	{
+		return $this->prodCode;
+	}
+
+	public function setProdCode($prodCode)
+	{
+		$this->prodCode = $prodCode;
 	}
 
 	public function setApiVersion($apiVersion)
@@ -125,5 +103,17 @@ class ZhimaCustomerCertificationCertifyRequest
 	{
 		return $this->apiVersion;
 	}
+
+  public function setNeedEncrypt($needEncrypt)
+  {
+
+     $this->needEncrypt=$needEncrypt;
+
+  }
+
+  public function getNeedEncrypt()
+  {
+    return $this->needEncrypt;
+  }
 
 }

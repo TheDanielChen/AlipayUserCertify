@@ -1,100 +1,37 @@
 <?php
 namespace Cstopery\AlipayUserCertify\Libarys\Zmop\Request;
 /**
- * ZHIMA API: zhima.credit.ep.lawsuit.record.get request
+ * ALIPAY API: zhima.credit.ep.lawsuit.record.get request
  *
  * @author auto create
- * @since 1.0, 2017-04-10 10:49:40
+ * @since 1.0, 2019-01-07 20:51:15
  */
 class ZhimaCreditEpLawsuitRecordGetRequest
 {
 	/** 
-	 * 企业名称和组织机构号，2个参数必须要输入一个
+	 * 企业涉诉记录查询
 	 **/
-	private $companyName;
-	
-	/** 
-	 * 涉诉类型。cpws-裁判文书; zxgg-执行公告; sxgg-失信公告; ktgg-开庭公告; fygg-法院公告; ajlc-案件流程信息; bgt-曝光台。
-	 **/
-	private $lawsuitType;
-	
-	/** 
-	 * 企业组织机构代码和企业名称2个参数，最少有一个
-	 **/
-	private $orgNo;
-	
-	/** 
-	 * 产品码
-	 **/
-	private $productCode;
-	
-	/** 
-	 * 商户传入的业务流水号。此字段由商户生成，需确保唯一性，用于定位每一次请求，后续按此流水进行对帐。生成规则: 固定30位数字串，前17位为精确到毫秒的时间yyyyMMddhhmmssSSS，后13位为自增数字。
-	 **/
-	private $transactionId;
+	private $bizContent;
 
 	private $apiParas = array();
-	private $fileParas = array();
+	private $terminalType;
+	private $terminalInfo;
+	private $prodCode;
 	private $apiVersion="1.0";
-	private $scene;
-	private $channel;
-	private $platform;
-	private $extParams;
+	private $notifyUrl;
+	private $returnUrl;
+    private $needEncrypt=false;
 
 	
-	public function setCompanyName($companyName)
+	public function setBizContent($bizContent)
 	{
-		$this->companyName = $companyName;
-		$this->apiParas["company_name"] = $companyName;
+		$this->bizContent = $bizContent;
+		$this->apiParas["biz_content"] = $bizContent;
 	}
 
-	public function getCompanyName()
+	public function getBizContent()
 	{
-		return $this->companyName;
-	}
-
-	public function setLawsuitType($lawsuitType)
-	{
-		$this->lawsuitType = $lawsuitType;
-		$this->apiParas["lawsuit_type"] = $lawsuitType;
-	}
-
-	public function getLawsuitType()
-	{
-		return $this->lawsuitType;
-	}
-
-	public function setOrgNo($orgNo)
-	{
-		$this->orgNo = $orgNo;
-		$this->apiParas["org_no"] = $orgNo;
-	}
-
-	public function getOrgNo()
-	{
-		return $this->orgNo;
-	}
-
-	public function setProductCode($productCode)
-	{
-		$this->productCode = $productCode;
-		$this->apiParas["product_code"] = $productCode;
-	}
-
-	public function getProductCode()
-	{
-		return $this->productCode;
-	}
-
-	public function setTransactionId($transactionId)
-	{
-		$this->transactionId = $transactionId;
-		$this->apiParas["transaction_id"] = $transactionId;
-	}
-
-	public function getTransactionId()
-	{
-		return $this->transactionId;
+		return $this->bizContent;
 	}
 
 	public function getApiMethodName()
@@ -102,54 +39,59 @@ class ZhimaCreditEpLawsuitRecordGetRequest
 		return "zhima.credit.ep.lawsuit.record.get";
 	}
 
-	public function setScene($scene)
+	public function setNotifyUrl($notifyUrl)
 	{
-		$this->scene=$scene;
+		$this->notifyUrl=$notifyUrl;
 	}
 
-	public function getScene()
+	public function getNotifyUrl()
 	{
-		return $this->scene;
-	}
-	
-	public function setChannel($channel)
-	{
-		$this->channel=$channel;
+		return $this->notifyUrl;
 	}
 
-	public function getChannel()
+	public function setReturnUrl($returnUrl)
 	{
-		return $this->channel;
-	}
-	
-	public function setPlatform($platform)
-	{
-		$this->platform=$platform;
+		$this->returnUrl=$returnUrl;
 	}
 
-	public function getPlatform()
+	public function getReturnUrl()
 	{
-		return $this->platform;
+		return $this->returnUrl;
 	}
-
-	public function setExtParams($extParams)
-	{
-		$this->extParams=$extParams;
-	}
-
-	public function getExtParams()
-	{
-		return $this->extParams;
-	}	
 
 	public function getApiParas()
 	{
 		return $this->apiParas;
 	}
-	
-	public function getFileParas()
+
+	public function getTerminalType()
 	{
-		return $this->fileParas;
+		return $this->terminalType;
+	}
+
+	public function setTerminalType($terminalType)
+	{
+		$this->terminalType = $terminalType;
+	}
+
+	public function getTerminalInfo()
+	{
+		return $this->terminalInfo;
+	}
+
+	public function setTerminalInfo($terminalInfo)
+	{
+		$this->terminalInfo = $terminalInfo;
+	}
+
+	public function getProdCode()
+	{
+		return $this->prodCode;
+	}
+
+	public function setProdCode($prodCode)
+	{
+		$this->prodCode = $prodCode;
 	}
 
 	public function setApiVersion($apiVersion)
@@ -161,5 +103,17 @@ class ZhimaCreditEpLawsuitRecordGetRequest
 	{
 		return $this->apiVersion;
 	}
+
+  public function setNeedEncrypt($needEncrypt)
+  {
+
+     $this->needEncrypt=$needEncrypt;
+
+  }
+
+  public function getNeedEncrypt()
+  {
+    return $this->needEncrypt;
+  }
 
 }

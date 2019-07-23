@@ -1,106 +1,37 @@
 <?php
 namespace Cstopery\AlipayUserCertify\Libarys\Zmop\Request;
 /**
- * ZHIMA API: zhima.credit.watchlist.brief.get request
+ * ALIPAY API: zhima.credit.watchlist.brief.get request
  *
  * @author auto create
- * @since 1.0, 2017-03-31 16:37:50
+ * @since 1.0, 2019-01-07 20:51:15
  */
 class ZhimaCreditWatchlistBriefGetRequest
 {
 	/** 
-	 * 证件类型对应的证件号码， 如：身份证号， 护照号，userId
+	 * 行业关注名单普惠版
 	 **/
-	private $certNo;
-	
-	/** 
-	 * 当前支持3种类型的输入：
-IDENTITY_CARD (身份证)
-PASSPORT (护照)
-ALIPAY_USER_ID (支付宝uid)
-	 **/
-	private $certType;
-	
-	/** 
-	 * 当cert_type 为ALIPAY_USER_ID时证件名称可为空
-	 **/
-	private $name;
-	
-	/** 
-	 * 芝麻开放平台信用产品码， 唯一标示云产品
-	 **/
-	private $productCode;
-	
-	/** 
-	 * 商户请求的唯一标志，长度64位以内字符串，仅限字母数字下划线组合。
-该标识作为业务调用的唯一标识，商户要保证其业务唯一性，使用相同transaction_id的查询，
-芝麻在一段时间内（一般为1天）返回首次查询结果，
-超过有效期的查询即为无效并返回异常，有效期内的重复查询不重新计费。
-	 **/
-	private $transactionId;
+	private $bizContent;
 
 	private $apiParas = array();
-	private $fileParas = array();
+	private $terminalType;
+	private $terminalInfo;
+	private $prodCode;
 	private $apiVersion="1.0";
-	private $scene;
-	private $channel;
-	private $platform;
-	private $extParams;
+	private $notifyUrl;
+	private $returnUrl;
+    private $needEncrypt=false;
 
 	
-	public function setCertNo($certNo)
+	public function setBizContent($bizContent)
 	{
-		$this->certNo = $certNo;
-		$this->apiParas["cert_no"] = $certNo;
+		$this->bizContent = $bizContent;
+		$this->apiParas["biz_content"] = $bizContent;
 	}
 
-	public function getCertNo()
+	public function getBizContent()
 	{
-		return $this->certNo;
-	}
-
-	public function setCertType($certType)
-	{
-		$this->certType = $certType;
-		$this->apiParas["cert_type"] = $certType;
-	}
-
-	public function getCertType()
-	{
-		return $this->certType;
-	}
-
-	public function setName($name)
-	{
-		$this->name = $name;
-		$this->apiParas["name"] = $name;
-	}
-
-	public function getName()
-	{
-		return $this->name;
-	}
-
-	public function setProductCode($productCode)
-	{
-		$this->productCode = $productCode;
-		$this->apiParas["product_code"] = $productCode;
-	}
-
-	public function getProductCode()
-	{
-		return $this->productCode;
-	}
-
-	public function setTransactionId($transactionId)
-	{
-		$this->transactionId = $transactionId;
-		$this->apiParas["transaction_id"] = $transactionId;
-	}
-
-	public function getTransactionId()
-	{
-		return $this->transactionId;
+		return $this->bizContent;
 	}
 
 	public function getApiMethodName()
@@ -108,54 +39,59 @@ ALIPAY_USER_ID (支付宝uid)
 		return "zhima.credit.watchlist.brief.get";
 	}
 
-	public function setScene($scene)
+	public function setNotifyUrl($notifyUrl)
 	{
-		$this->scene=$scene;
+		$this->notifyUrl=$notifyUrl;
 	}
 
-	public function getScene()
+	public function getNotifyUrl()
 	{
-		return $this->scene;
-	}
-	
-	public function setChannel($channel)
-	{
-		$this->channel=$channel;
+		return $this->notifyUrl;
 	}
 
-	public function getChannel()
+	public function setReturnUrl($returnUrl)
 	{
-		return $this->channel;
-	}
-	
-	public function setPlatform($platform)
-	{
-		$this->platform=$platform;
+		$this->returnUrl=$returnUrl;
 	}
 
-	public function getPlatform()
+	public function getReturnUrl()
 	{
-		return $this->platform;
+		return $this->returnUrl;
 	}
-
-	public function setExtParams($extParams)
-	{
-		$this->extParams=$extParams;
-	}
-
-	public function getExtParams()
-	{
-		return $this->extParams;
-	}	
 
 	public function getApiParas()
 	{
 		return $this->apiParas;
 	}
-	
-	public function getFileParas()
+
+	public function getTerminalType()
 	{
-		return $this->fileParas;
+		return $this->terminalType;
+	}
+
+	public function setTerminalType($terminalType)
+	{
+		$this->terminalType = $terminalType;
+	}
+
+	public function getTerminalInfo()
+	{
+		return $this->terminalInfo;
+	}
+
+	public function setTerminalInfo($terminalInfo)
+	{
+		$this->terminalInfo = $terminalInfo;
+	}
+
+	public function getProdCode()
+	{
+		return $this->prodCode;
+	}
+
+	public function setProdCode($prodCode)
+	{
+		$this->prodCode = $prodCode;
 	}
 
 	public function setApiVersion($apiVersion)
@@ -167,5 +103,17 @@ ALIPAY_USER_ID (支付宝uid)
 	{
 		return $this->apiVersion;
 	}
+
+  public function setNeedEncrypt($needEncrypt)
+  {
+
+     $this->needEncrypt=$needEncrypt;
+
+  }
+
+  public function getNeedEncrypt()
+  {
+    return $this->needEncrypt;
+  }
 
 }

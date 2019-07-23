@@ -1,15 +1,15 @@
 <?php
 namespace Cstopery\AlipayUserCertify\Libarys\Zmop\Request;
 /**
- * ZHIMA API: zhima.merchant.closeloop.data.upload request
+ * ALIPAY API: zhima.merchant.closeloop.data.upload request
  *
  * @author auto create
- * @since 1.0, 2017-06-14 16:58:00
+ * @since 1.0, 2019-01-07 20:51:15
  */
 class ZhimaMerchantCloseloopDataUploadRequest
 {
 	/** 
-	 * 扩展参数
+	 * 公用回传参数（非必填），该参数会透传给商户，商户可以用于业务逻辑处理，请使用json格式。
 	 **/
 	private $bizExtParams;
 	
@@ -19,37 +19,47 @@ class ZhimaMerchantCloseloopDataUploadRequest
 	private $columns;
 	
 	/** 
-	 * 传入的json格式的文件，其中{"records":  是每个文件的固定开头。
+	 * 传入的json格式的文件，其中records属性必填。json中的字段可以通过如下步骤获取：首先调用zhima.merchant.data.upload.initialize接口获取数据模板，该接口会返回一个数据模板文件的url地址，如：http://zmxymerchant-prod.oss-cn-shenzhen.zmxy.com.cn/openApi/openDoc/信用护航-负面记录和信用足迹商户数据模板V1.0.xlsx，该数据模板文件详细列出了需要传入的字段，及各字段的要求，data中的各字段就是该文件中列出的字段编码。
 	 **/
 	private $file;
 	
 	/** 
-	 * 是传入文件的数据编码，如果文件格式是UTF-8，则填写UTF-8，如果文件格式是GBK，则填写GBK
+	 * 文件的编码，如果文件格式是UTF-8，则填写UTF-8，如果文件格式是GBK，则填写GBK。
 	 **/
 	private $fileCharset;
 	
 	/** 
-	 * 主键列使用反馈字段进行组合，也可以使用反馈的某个单字段（确保主键稳定，而且可以很好的区分不同的数据）。例如order_no,pay_month或者order_no,bill_month组合，对于一个order_no只会有一条数据的情况，直接使用order_no作为主键列
+	 * 芝麻平台服务商模式下的二级商户标识（即二级商户PID），如果是直连商户调用该接口，不需要设置
+	 **/
+	private $linkedMerchantId;
+	
+	/** 
+	 * 主键列使用传入字段进行组合，也可以使用传入的某个单字段（确保主键稳定，而且可以很好的区分不同的数据）。例如order_no,pay_month或者order_no,bill_month组合，对于一个order_no只会有一条数据的情况，直接使用order_no作为主键列。
 	 **/
 	private $primaryKeyColumns;
 	
 	/** 
-	 * 文件数据记录条数
+	 * 文件数据记录条数，如file字段中的record数组有10条数据，那么就填10。
 	 **/
 	private $records;
 	
 	/** 
-	 * 场景码，用于标识上传的文件的用途，不同的场景码，file中的json格式不一样
+	 * 数据应用的场景编码，场景码和场景名称（数字或字符串为场景码）如下：
+8：数据反馈
+32：骑行
+CAR_RENTING：租车行业解决方案
+每个场景码对应的数据模板不一样，请使用zhima.merchant.data.upload.initialize接口获取场景码对应的数据模板。
 	 **/
 	private $sceneCode;
 
 	private $apiParas = array();
-	private $fileParas = array();
+	private $terminalType;
+	private $terminalInfo;
+	private $prodCode;
 	private $apiVersion="1.0";
-	private $scene;
-	private $channel;
-	private $platform;
-	private $extParams;
+	private $notifyUrl;
+	private $returnUrl;
+    private $needEncrypt=false;
 
 	
 	public function setBizExtParams($bizExtParams)
@@ -77,7 +87,7 @@ class ZhimaMerchantCloseloopDataUploadRequest
 	public function setFile($file)
 	{
 		$this->file = $file;
-		$this->fileParas["file"] = $file;
+		$this->apiParas["file"] = $file;
 	}
 
 	public function getFile()
@@ -94,6 +104,17 @@ class ZhimaMerchantCloseloopDataUploadRequest
 	public function getFileCharset()
 	{
 		return $this->fileCharset;
+	}
+
+	public function setLinkedMerchantId($linkedMerchantId)
+	{
+		$this->linkedMerchantId = $linkedMerchantId;
+		$this->apiParas["linked_merchant_id"] = $linkedMerchantId;
+	}
+
+	public function getLinkedMerchantId()
+	{
+		return $this->linkedMerchantId;
 	}
 
 	public function setPrimaryKeyColumns($primaryKeyColumns)
@@ -134,54 +155,59 @@ class ZhimaMerchantCloseloopDataUploadRequest
 		return "zhima.merchant.closeloop.data.upload";
 	}
 
-	public function setScene($scene)
+	public function setNotifyUrl($notifyUrl)
 	{
-		$this->scene=$scene;
+		$this->notifyUrl=$notifyUrl;
 	}
 
-	public function getScene()
+	public function getNotifyUrl()
 	{
-		return $this->scene;
-	}
-	
-	public function setChannel($channel)
-	{
-		$this->channel=$channel;
+		return $this->notifyUrl;
 	}
 
-	public function getChannel()
+	public function setReturnUrl($returnUrl)
 	{
-		return $this->channel;
-	}
-	
-	public function setPlatform($platform)
-	{
-		$this->platform=$platform;
+		$this->returnUrl=$returnUrl;
 	}
 
-	public function getPlatform()
+	public function getReturnUrl()
 	{
-		return $this->platform;
+		return $this->returnUrl;
 	}
-
-	public function setExtParams($extParams)
-	{
-		$this->extParams=$extParams;
-	}
-
-	public function getExtParams()
-	{
-		return $this->extParams;
-	}	
 
 	public function getApiParas()
 	{
 		return $this->apiParas;
 	}
-	
-	public function getFileParas()
+
+	public function getTerminalType()
 	{
-		return $this->fileParas;
+		return $this->terminalType;
+	}
+
+	public function setTerminalType($terminalType)
+	{
+		$this->terminalType = $terminalType;
+	}
+
+	public function getTerminalInfo()
+	{
+		return $this->terminalInfo;
+	}
+
+	public function setTerminalInfo($terminalInfo)
+	{
+		$this->terminalInfo = $terminalInfo;
+	}
+
+	public function getProdCode()
+	{
+		return $this->prodCode;
+	}
+
+	public function setProdCode($prodCode)
+	{
+		$this->prodCode = $prodCode;
 	}
 
 	public function setApiVersion($apiVersion)
@@ -193,5 +219,17 @@ class ZhimaMerchantCloseloopDataUploadRequest
 	{
 		return $this->apiVersion;
 	}
+
+  public function setNeedEncrypt($needEncrypt)
+  {
+
+     $this->needEncrypt=$needEncrypt;
+
+  }
+
+  public function getNeedEncrypt()
+  {
+    return $this->needEncrypt;
+  }
 
 }

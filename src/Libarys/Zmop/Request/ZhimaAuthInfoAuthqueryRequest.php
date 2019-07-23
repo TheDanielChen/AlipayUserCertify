@@ -1,75 +1,37 @@
 <?php
 namespace Cstopery\AlipayUserCertify\Libarys\Zmop\Request;
 /**
- * ZHIMA API: zhima.auth.info.authquery request
+ * ALIPAY API: zhima.auth.info.authquery request
  *
  * @author auto create
- * @since 1.0, 2017-04-07 10:48:13
+ * @since 1.0, 2019-01-07 20:51:15
  */
 class ZhimaAuthInfoAuthqueryRequest
 {
 	/** 
-	 * 授权类型，用于识别当前查询是否授权的分流；
-可传参数“B2B”或“C2B”，自助商户请填写“C2B”。
+	 * 查询是否授权的接口
 	 **/
-	private $authCategory;
-	
-	/** 
-	 * 不同身份类型传入的参数列表,json字符串的key-value格式
-身份类型identityType=0:
-{"openId":"268801234567890123456"}
-身份类型identityType=2:
-{"certNo":"330100xxxxxxxxxxxx","name":"张三","certType":"IDENTITY_CARD"}
-	 **/
-	private $identityParam;
-	
-	/** 
-	 * 身份标识类型
-0:按照openId查询
-2:按照身份证+姓名查询
-	 **/
-	private $identityType;
+	private $bizContent;
 
 	private $apiParas = array();
-	private $fileParas = array();
+	private $terminalType;
+	private $terminalInfo;
+	private $prodCode;
 	private $apiVersion="1.0";
-	private $scene;
-	private $channel;
-	private $platform;
-	private $extParams;
+	private $notifyUrl;
+	private $returnUrl;
+    private $needEncrypt=false;
 
 	
-	public function setAuthCategory($authCategory)
+	public function setBizContent($bizContent)
 	{
-		$this->authCategory = $authCategory;
-		$this->apiParas["auth_category"] = $authCategory;
+		$this->bizContent = $bizContent;
+		$this->apiParas["biz_content"] = $bizContent;
 	}
 
-	public function getAuthCategory()
+	public function getBizContent()
 	{
-		return $this->authCategory;
-	}
-
-	public function setIdentityParam($identityParam)
-	{
-		$this->identityParam = $identityParam;
-		$this->apiParas["identity_param"] = $identityParam;
-	}
-
-	public function getIdentityParam()
-	{
-		return $this->identityParam;
-	}
-
-	public function setIdentityType($identityType)
-	{
-		$this->identityType = $identityType;
-		$this->apiParas["identity_type"] = $identityType;
-	}
-
-	public function getIdentityType()
-	{
-		return $this->identityType;
+		return $this->bizContent;
 	}
 
 	public function getApiMethodName()
@@ -77,54 +39,59 @@ class ZhimaAuthInfoAuthqueryRequest
 		return "zhima.auth.info.authquery";
 	}
 
-	public function setScene($scene)
+	public function setNotifyUrl($notifyUrl)
 	{
-		$this->scene=$scene;
+		$this->notifyUrl=$notifyUrl;
 	}
 
-	public function getScene()
+	public function getNotifyUrl()
 	{
-		return $this->scene;
-	}
-	
-	public function setChannel($channel)
-	{
-		$this->channel=$channel;
+		return $this->notifyUrl;
 	}
 
-	public function getChannel()
+	public function setReturnUrl($returnUrl)
 	{
-		return $this->channel;
-	}
-	
-	public function setPlatform($platform)
-	{
-		$this->platform=$platform;
+		$this->returnUrl=$returnUrl;
 	}
 
-	public function getPlatform()
+	public function getReturnUrl()
 	{
-		return $this->platform;
+		return $this->returnUrl;
 	}
-
-	public function setExtParams($extParams)
-	{
-		$this->extParams=$extParams;
-	}
-
-	public function getExtParams()
-	{
-		return $this->extParams;
-	}	
 
 	public function getApiParas()
 	{
 		return $this->apiParas;
 	}
-	
-	public function getFileParas()
+
+	public function getTerminalType()
 	{
-		return $this->fileParas;
+		return $this->terminalType;
+	}
+
+	public function setTerminalType($terminalType)
+	{
+		$this->terminalType = $terminalType;
+	}
+
+	public function getTerminalInfo()
+	{
+		return $this->terminalInfo;
+	}
+
+	public function setTerminalInfo($terminalInfo)
+	{
+		$this->terminalInfo = $terminalInfo;
+	}
+
+	public function getProdCode()
+	{
+		return $this->prodCode;
+	}
+
+	public function setProdCode($prodCode)
+	{
+		$this->prodCode = $prodCode;
 	}
 
 	public function setApiVersion($apiVersion)
@@ -136,5 +103,17 @@ class ZhimaAuthInfoAuthqueryRequest
 	{
 		return $this->apiVersion;
 	}
+
+  public function setNeedEncrypt($needEncrypt)
+  {
+
+     $this->needEncrypt=$needEncrypt;
+
+  }
+
+  public function getNeedEncrypt()
+  {
+    return $this->needEncrypt;
+  }
 
 }

@@ -1,18 +1,18 @@
 <?php 
 namespace Cstopery\AlipayUserCertify;
 
-use App\Http\Controllers\Controller;
+//use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Config;
 use Cstopery\AlipayUserCertify\Libarys\Zmop\ZmopClient;
 // use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaCreditScoreGetRequest;
-use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaAuthInfoAuthorizeRequest;
+//use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaAuthInfoAuthorizeRequest;
 // use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaCreditWatchlistiiGetRequest;
 // use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaCreditAntifraudScoreGetRequest;
 // use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaCreditAntifraudVerifyRequest;
 // use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaCreditAntifraudRiskListRequest;
-use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaCustomerCertificationQueryRequest;
-use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaCustomerCertificationInitializeRequest;
-use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaCustomerCertificationCertifyRequest;
+use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayUserCertifyOpenQueryRequest;
+use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayUserCertifyOpenInitializeRequest;
+use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayUserCertifyOpenCertifyRequest;
 
 class AlipayUserCertify
 {
@@ -54,18 +54,18 @@ class AlipayUserCertify
     }
 
     // 页面授权
-    public function ZhimaAuthInfoAuthorize($name,$idcard){
-        $config=Config::get("AlipayUserCertify.AlipayUserCertify");
-        $client = new ZmopClient($config["gatewayUrl"],$config["appId"],$config["charset"],$config["privateKeyFile"],$config["zmPublicKeyFile"]);
-        $request = new ZhimaAuthInfoAuthorizeRequest();
-        $request->setChannel("apppc");
-        $request->setPlatform("zmop");
-        $request->setIdentityType("2");// 必要参数 
-        $request->setIdentityParam(json_encode(array("name"=>$name,"certType"=>"IDENTITY_CARD","certNo"=>$idcard)));// 必要参数
-        $request->setBizParams(json_encode(array("auth_code"=>"M_H5","channelType"=>"app","state"=>$idcard)));// 
-        $url = $client->generatePageRedirectInvokeUrl($request);
-        return $url;
-    }
+//    public function ZhimaAuthInfoAuthorize($name,$idcard){
+//        $config=Config::get("AlipayUserCertify.AlipayUserCertify");
+//        $client = new ZmopClient($config["gatewayUrl"],$config["appId"],$config["charset"],$config["privateKeyFile"],$config["zmPublicKeyFile"]);
+//        $request = new ZhimaAuthInfoAuthorizeRequest();
+//        $request->setChannel("apppc");
+//        $request->setPlatform("zmop");
+//        $request->setIdentityType("2");// 必要参数
+//        $request->setIdentityParam(json_encode(array("name"=>$name,"certType"=>"IDENTITY_CARD","certNo"=>$idcard)));// 必要参数
+//        $request->setBizParams(json_encode(array("auth_code"=>"M_H5","channelType"=>"app","state"=>$idcard)));//
+//        $url = $client->generatePageRedirectInvokeUrl($request);
+//        return $url;
+//    }
 
     // 行业关注名单
     // public function ZhimaCreditWatchlistiiGet($open_id){
@@ -157,7 +157,7 @@ class AlipayUserCertify
     public function ZhimaCustomerCertificationQuery($bizno){
         $config=Config::get("AlipayUserCertify.AlipayUserCertify");
         $client = new ZmopClient($config["gatewayUrl"],$config["appId"],$config["charset"],$config["privateKeyFile"],$config["zmPublicKeyFile"]);
-        $request = new ZhimaCustomerCertificationQueryRequest();
+        $request = new AlipayUserCertifyOpenQueryRequest();
         // $request->setChannel("apppc");
         // $request->setPlatform("zmop");
         $request->setCertifyId($bizno);// 必要参数 
@@ -169,7 +169,7 @@ class AlipayUserCertify
     public function ZhimaCustomerCertificationInitialize($name,$idcard){
         $config=Config::get("AlipayUserCertify.AlipayUserCertify");
         $client = new ZmopClient($config["gatewayUrl"],$config["appId"],$config["charset"],$config["privateKeyFile"],$config["zmPublicKeyFile"]);
-        $request = new ZhimaCustomerCertificationInitializeRequest();
+        $request = new AlipayUserCertifyOpenInitializeRequest();
         // $request->setChannel("apppc");
         // $request->setPlatform("zmop");
         $request->setOuterOrderNo(rand(100000000000000,999999999999999));// 必要参数 
@@ -187,7 +187,7 @@ class AlipayUserCertify
     public function ZhimaCustomerCertificationCertify($bizno,$returnurl){
         $config=Config::get("AlipayUserCertify.AlipayUserCertify");
         $client = new ZmopClient($config["gatewayUrl"],$config["appId"],$config["charset"],$config["privateKeyFile"],$config["zmPublicKeyFile"]);
-        $request = new ZhimaCustomerCertificationCertifyRequest();
+        $request = new AlipayUserCertifyOpenCertifyRequest();
         // $request->setChannel("apppc");
         // $request->setPlatform("zmop");
         $request->setCertifyId($bizno);// 必要参数 

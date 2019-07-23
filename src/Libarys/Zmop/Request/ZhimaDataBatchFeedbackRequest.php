@@ -1,10 +1,10 @@
 <?php
 namespace Cstopery\AlipayUserCertify\Libarys\Zmop\Request;
 /**
- * ZHIMA API: zhima.data.batch.feedback request
+ * ALIPAY API: zhima.data.batch.feedback request
  *
  * @author auto create
- * @since 1.0, 2016-08-01 16:12:33
+ * @since 1.0, 2019-01-07 20:51:15
  */
 class ZhimaDataBatchFeedbackRequest
 {
@@ -19,7 +19,7 @@ class ZhimaDataBatchFeedbackRequest
 	private $columns;
 	
 	/** 
-	 * 反馈的json格式的文件，其中{"records":  是每个文件的固定开头。
+	 * 反馈的json格式文件，其中{"records":  是每个文件的固定开头，文件中的字段名请使用数据反馈模板（该模板是通过“获取数据反馈模板”接口获得）中字段编码列的英文字段来组装
 	 **/
 	private $file;
 	
@@ -34,7 +34,7 @@ class ZhimaDataBatchFeedbackRequest
 	private $fileDescription;
 	
 	/** 
-	 * 反馈的数据类型，目前只支持json_data
+	 * 反馈的数据类型
 	 **/
 	private $fileType;
 	
@@ -47,20 +47,15 @@ class ZhimaDataBatchFeedbackRequest
 	 * 文件数据记录条数
 	 **/
 	private $records;
-	
-	/** 
-	 * 芝麻系统中配置的值，由支付宝身份认证提供，需要匹配，测试反馈和正式反馈使用不同的type_id。
-其中测试type_id与反馈字段模板会通过邮件统一提供给合作伙伴，在测试反馈通过之后，再通过邮件提供正式反馈type_id给合作伙伴。
-	 **/
-	private $typeId;
 
 	private $apiParas = array();
-	private $fileParas = array();
+	private $terminalType;
+	private $terminalInfo;
+	private $prodCode;
 	private $apiVersion="1.0";
-	private $scene;
-	private $channel;
-	private $platform;
-	private $extParams;
+	private $notifyUrl;
+	private $returnUrl;
+    private $needEncrypt=false;
 
 	
 	public function setBizExtParams($bizExtParams)
@@ -88,7 +83,7 @@ class ZhimaDataBatchFeedbackRequest
 	public function setFile($file)
 	{
 		$this->file = $file;
-		$this->fileParas["file"] = $file;
+		$this->apiParas["file"] = $file;
 	}
 
 	public function getFile()
@@ -151,70 +146,64 @@ class ZhimaDataBatchFeedbackRequest
 		return $this->records;
 	}
 
-	public function setTypeId($typeId)
-	{
-		$this->typeId = $typeId;
-		$this->apiParas["type_id"] = $typeId;
-	}
-
-	public function getTypeId()
-	{
-		return $this->typeId;
-	}
-
 	public function getApiMethodName()
 	{
 		return "zhima.data.batch.feedback";
 	}
 
-	public function setScene($scene)
+	public function setNotifyUrl($notifyUrl)
 	{
-		$this->scene=$scene;
+		$this->notifyUrl=$notifyUrl;
 	}
 
-	public function getScene()
+	public function getNotifyUrl()
 	{
-		return $this->scene;
-	}
-	
-	public function setChannel($channel)
-	{
-		$this->channel=$channel;
+		return $this->notifyUrl;
 	}
 
-	public function getChannel()
+	public function setReturnUrl($returnUrl)
 	{
-		return $this->channel;
-	}
-	
-	public function setPlatform($platform)
-	{
-		$this->platform=$platform;
+		$this->returnUrl=$returnUrl;
 	}
 
-	public function getPlatform()
+	public function getReturnUrl()
 	{
-		return $this->platform;
+		return $this->returnUrl;
 	}
-
-	public function setExtParams($extParams)
-	{
-		$this->extParams=$extParams;
-	}
-
-	public function getExtParams()
-	{
-		return $this->extParams;
-	}	
 
 	public function getApiParas()
 	{
 		return $this->apiParas;
 	}
-	
-	public function getFileParas()
+
+	public function getTerminalType()
 	{
-		return $this->fileParas;
+		return $this->terminalType;
+	}
+
+	public function setTerminalType($terminalType)
+	{
+		$this->terminalType = $terminalType;
+	}
+
+	public function getTerminalInfo()
+	{
+		return $this->terminalInfo;
+	}
+
+	public function setTerminalInfo($terminalInfo)
+	{
+		$this->terminalInfo = $terminalInfo;
+	}
+
+	public function getProdCode()
+	{
+		return $this->prodCode;
+	}
+
+	public function setProdCode($prodCode)
+	{
+		$this->prodCode = $prodCode;
 	}
 
 	public function setApiVersion($apiVersion)
@@ -226,5 +215,17 @@ class ZhimaDataBatchFeedbackRequest
 	{
 		return $this->apiVersion;
 	}
+
+  public function setNeedEncrypt($needEncrypt)
+  {
+
+     $this->needEncrypt=$needEncrypt;
+
+  }
+
+  public function getNeedEncrypt()
+  {
+    return $this->needEncrypt;
+  }
 
 }
