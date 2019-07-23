@@ -215,7 +215,7 @@ class AlipayUserCertify
         $bizCon = [
             'outer_order_no' => rand(100000000000000,999999999999999),
             'biz_code' => 'FACE',
-            'identity_param'=>['identity_type'=>'CERT_INFO','cert_type'=>'IDENTITY_CARD','cert_name'=>name,'cert_no'=>idcard],
+            'identity_param'=>['identity_type'=>'CERT_INFO','cert_type'=>'IDENTITY_CARD','cert_name'=>$name,'cert_no'=>$idcard],
             'merchant_config'=>['return_url'=>$config['authReturnUrl']]
         ];
 
