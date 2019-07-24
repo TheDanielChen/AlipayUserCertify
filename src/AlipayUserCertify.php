@@ -176,6 +176,17 @@ class AlipayUserCertify
 
         $request->setBizContent(json_encode($bizCon,true));
         $obj = $aop->pageExecute( $request); 
+
+
+        $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
+
+        if($obj->$responseNode){
+            return $obj->$responseNode;
+
+        }
+
+        return null;
+
         foreach ($obj as $paraKey => $paraValue) {
 			//如果属性名以_reponse结尾，该属性对应的值为业务返回值
 			if(strrchr($paraKey, "_response") == "_response"){
@@ -222,6 +233,15 @@ class AlipayUserCertify
 
         $request->setBizContent(json_encode($bizCon,true));
         $obj = $aop->execute ( $request); 
+
+        $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
+
+        if($obj->$responseNode){
+            return $obj->$responseNode;
+
+        }
+
+        return null;
 
 
         foreach ($obj as $paraKey => $paraValue) {
@@ -278,13 +298,25 @@ class AlipayUserCertify
 
         $request->setBizContent(json_encode($bizCon,true));
         $obj = $aop->pageExecute( $request); 
-        foreach ($obj as $paraKey => $paraValue) {
-			//如果属性名以_reponse结尾，该属性对应的值为业务返回值
-			if(strrchr($paraKey, "_response") == "_response"){
-				return $paraValue;
-			}
-		}
+
+
+        $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
+
+        if($obj->$responseNode){
+            return $obj->$responseNode;
+
+        }
+
         return null;
+
+
+
+        // foreach ($obj as $paraKey => $paraValue) {
+		// 	//如果属性名以_reponse结尾，该属性对应的值为业务返回值
+		// 	if(strrchr($paraKey, "_response") == "_response"){
+		// 		return $paraValue;
+		// 	}
+		// }
 
 
 
