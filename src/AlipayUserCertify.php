@@ -165,7 +165,7 @@ class AlipayUserCertify
         $aop->rsaPrivateKey = file_get_contents($config["privateKeyFile"]);
         $aop->alipayrsaPublicKey=file_get_contents($config["zmPublicKeyFile"]);
         $aop->apiVersion = '1.0';
-        $aop->signType = 'RSA2';
+        $aop->signType = 'RSA';
         $aop->postCharset=$config["charset"];
         $aop->format='json';
         $request = new AlipayUserCertifyOpenQueryRequest ();
@@ -217,7 +217,7 @@ class AlipayUserCertify
         $aop->rsaPrivateKey = file_get_contents($config["privateKeyFile"]);
         $aop->alipayrsaPublicKey=file_get_contents($config["zmPublicKeyFile"]);
         $aop->apiVersion = '1.0';
-        $aop->signType = 'RSA2';
+        $aop->signType = 'RSA';
         $aop->postCharset=$config["charset"];
         $aop->format='json';
 
@@ -287,7 +287,7 @@ class AlipayUserCertify
         $aop->rsaPrivateKey = file_get_contents($config["privateKeyFile"]);
         $aop->alipayrsaPublicKey=file_get_contents($config["zmPublicKeyFile"]);
         $aop->apiVersion = '1.0';
-        $aop->signType = 'RSA2';
+        $aop->signType = 'RSA';
         $aop->postCharset=$config["charset"];
         $aop->format='json';
         $request = new AlipayUserCertifyOpenCertifyRequest ();
