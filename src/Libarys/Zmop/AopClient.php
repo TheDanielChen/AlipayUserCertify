@@ -926,7 +926,7 @@ class AopClient {
 	}
 
 	function parserJSONSign($responseJSon) {
-
+		var_dump($responseJSon);
 		return $responseJSon->sign;
 	}
 
