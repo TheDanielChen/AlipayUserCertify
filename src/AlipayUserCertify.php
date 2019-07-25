@@ -165,7 +165,7 @@ class AlipayUserCertify
         $aop->rsaPrivateKey = file_get_contents($config["privateKeyFile"]);
         $aop->alipayrsaPublicKey=file_get_contents($config["zmPublicKeyFile"]);
         $aop->apiVersion = '1.0';
-        $aop->signType = 'RSA';
+        $aop->signType = 'RSA2';
         $aop->postCharset=$config["charset"];
         $aop->format='json';
         $request = new AlipayUserCertifyOpenQueryRequest ();
@@ -218,14 +218,14 @@ class AlipayUserCertify
         $aop->rsaPrivateKey = file_get_contents($config["privateKeyFile"]);
         $aop->alipayrsaPublicKey=file_get_contents($config["zmPublicKeyFile"]);
         $aop->apiVersion = '1.0';
-        $aop->signType = 'RSA';
+        $aop->signType = 'RSA2';
         $aop->postCharset=$config["charset"];
         $aop->format='json';
 
         $request = new AlipayUserCertifyOpenInitializeRequest();
 
         $bizCon = [
-            'outer_order_no' => rand(100000000000000,999999999999999),
+            'outer_order_no' => strval(rand(100000000000000,999999999999999)),
             'biz_code' => 'FACE',
             'identity_param'=>['identity_type'=>'CERT_INFO','cert_type'=>'IDENTITY_CARD','cert_name'=>$name,'cert_no'=>$idcard],
             'merchant_config'=>['return_url'=>$config['authReturnUrl']]
@@ -288,7 +288,7 @@ class AlipayUserCertify
         $aop->rsaPrivateKey = file_get_contents($config["privateKeyFile"]);
         $aop->alipayrsaPublicKey=file_get_contents($config["zmPublicKeyFile"]);
         $aop->apiVersion = '1.0';
-        $aop->signType = 'RSA';
+        $aop->signType = 'RSA2';
         $aop->postCharset=$config["charset"];
         $aop->format='json';
         $request = new AlipayUserCertifyOpenCertifyRequest ();
@@ -298,7 +298,9 @@ class AlipayUserCertify
         ];
 
         $request->setBizContent(json_encode($bizCon,true));
-        $obj = $aop->pageExecute( $request); 
+        $obj = $aop->pageExecute( $request,'GET'); 
+
+        return $obj;
 
 
         $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
