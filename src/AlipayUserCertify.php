@@ -211,6 +211,7 @@ class AlipayUserCertify
     public function ZhimaCustomerCertificationInitialize($name,$idcard){
         $config=Config::get("AlipayUserCertify.AlipayUserCertify");
 
+        var_dump($config);
         $aop = new AopClient();
         $aop->gatewayUrl = $config["gatewayUrl"];
         $aop->appId = $config["appId"];
