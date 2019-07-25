@@ -175,7 +175,7 @@ class AlipayUserCertify
         ];
 
         $request->setBizContent(json_encode($bizCon,true));
-        $obj = $aop->pageExecute( $request); 
+        $obj = $aop->execute( $request); 
 
 
         $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
