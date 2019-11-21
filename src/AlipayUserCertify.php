@@ -15,6 +15,10 @@ use Cstopery\AlipayUserCertify\Libarys\Zmop\AopClient;
 use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayUserCertifyOpenQueryRequest;
 use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayUserCertifyOpenInitializeRequest;
 use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayUserCertifyOpenCertifyRequest;
+use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayFundAuthOrderAppFreezeRequest;
+use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayTradePayRequest;
+use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayTradeAppPayRequest;
+
 
 class AlipayUserCertify
 {
@@ -332,5 +336,157 @@ class AlipayUserCertify
         $url = $client->generatePageRedirectInvokeUrl($request);
         return $url;
     }
+
+    // 支付宝预授权
+    public function AlipayFundAuthOrderAppFreeze($order_no,$total_price){
+
+        $config=Config::get("AlipayUserCertify.AlipayUserCertify");
+
+        // var_dump($config);
+        $aop = new AopClient();
+        $aop->gatewayUrl = $config["gatewayUrl"];
+        $aop->appId = $config["appId"];
+        $aop->rsaPrivateKey = file_get_contents($config["privateKeyFile"]);
+        $aop->alipayrsaPublicKey=file_get_contents($config["zmPublicKeyFile"]);
+        $aop->apiVersion = '1.0';
+        $aop->signType = 'RSA2';
+        $aop->postCharset=$config["charset"];
+        $aop->format='json';
+        $aop->notify_url = $config["freeze_notify_url"];
+
+        $request = new AlipayFundAuthOrderAppFreezeRequest();
+
+        $bizCon = [
+
+            'out_order_no'          =>  $order_no,  //商户订单号
+            'out_request_no'        =>  $order_no.rand(100,999),  //请求流水号
+            'order_title'           =>  '芝麻信用预授权冻结',        
+            'amount'                =>  $total_price,  //预授权金额
+            'product_code'          =>  'PRE_AUTH_ONLINE', //固定
+            //'payee_logon_id'        =>  '15307124426',
+            'payee_user_id'         =>  $config['appId'],
+            'extra_param'           => '{"category":"TRAD_RENT_CAR"}',
+
+        ];
+
+
+        $request->setBizContent(json_encode($bizCon,true));
+        $obj = $aop->execute ( $request); 
+
+        // $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
+
+        if($obj->body){
+            return $obj->body;
+
+        }
+
+        return null;
+    }
+
+    // 授权转支付
+    public function AlipayTradePay($order_no,$total_price,$buyer_id,$auth_no,$mode=''){
+
+        $config=Config::get("AlipayUserCertify.AlipayUserCertify");
+
+        // var_dump($config);
+        $aop = new AopClient();
+        $aop->gatewayUrl = $config["gatewayUrl"];
+        $aop->appId = $config["appId"];
+        $aop->rsaPrivateKey = file_get_contents($config["privateKeyFile"]);
+        $aop->alipayrsaPublicKey=file_get_contents($config["zmPublicKeyFile"]);
+        $aop->apiVersion = '1.0';
+        $aop->signType = 'RSA2';
+        $aop->postCharset=$config["charset"];
+        $aop->format='json';
+
+        $request = new AlipayTradePayRequest();
+
+        $bizCon = [
+
+            'out_order_no'          =>  $order_no,  //商户订单号
+            'total_amount'          =>  $total_price,  //预授权金额
+            'product_code'          =>  'PRE_AUTH_ONLINE', //固定
+            'subject'               =>  '预授权转支付',        
+            'buyer_id'              =>  $buyer_id,  
+            'seller_id'             =>  $config['appId'], //固定
+            'auth_no'               =>  $auth_no,
+            'body'                  =>  '预授权转支付',
+            //'auth_confirm_mode'     =>  'COMPLETE',  //auth_confirm_mode传入COMPLETE，无需调用解冻接口，支付宝端在扣款成功后会自动解冻剩余金额
+
+        ];
+
+        if($mode == 'COMPLETE'){
+            $bizCon['auth_confirm_mode'] = 'COMPLETE';
+        }
+
+        $request->setBizContent(json_encode($bizCon,true));
+        $obj = $aop->execute ( $request); 
+
+        $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
+
+        if($obj->$responseNode){
+            return $obj->$responseNode;
+
+        }
+
+        return null;
+
+
+    }
+
+    //先支付后签约场景
+    public function AlipayTradeAppPay($order_no,$total_price,){
+        $config=Config::get("AlipayUserCertify.AlipayUserCertify");
+
+        // var_dump($config);
+        $aop = new AopClient();
+        $aop->gatewayUrl = $config["gatewayUrl"];
+        $aop->appId = $config["appId"];
+        $aop->rsaPrivateKey = file_get_contents($config["privateKeyFile"]);
+        $aop->alipayrsaPublicKey=file_get_contents($config["zmPublicKeyFile"]);
+        $aop->apiVersion = '1.0';
+        $aop->signType = 'RSA2';
+        $aop->postCharset=$config["charset"];
+        $aop->format='json';
+        $aop->notify_url = $config["agreement_notify_url"];
+
+
+        $request = new AlipayTradeAppPayRequest();
+
+        $bizCon = [
+
+            'out_trade_no'          =>  $order_no,  //商户订单号
+            'total_amount'          =>  $total_price,  //预授权金额
+            'product_code'          =>  'QUICK_MSECURITY_PAY', //固定
+            'subject'               =>  '先支付后签约',        
+            'agreement_sign_params' =>[
+                    'personal_product_code' => 'CYCLE_PAY_AUTH_P',
+                    'sign_scene'    => 'INDUSTRY|CARRENTAL',
+                    'external_agreement_no' => $order_no,
+                    'access_params' => [
+                            'channel' => 'ALIPAYAPP'
+                    ],
+                    'period_rule_params' => [
+                            'period_type' => 'MONTH',
+                            'period' => 1,
+
+                    ],
+            ],
+
+        ];
+
+        $request->setBizContent(json_encode($bizCon,true));
+        $obj = $aop->execute ( $request); 
+
+        $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
+
+        if($obj->$responseNode){
+            return $obj->$responseNode;
+
+        }
+
+        return null;
+    }
+
 
 }
