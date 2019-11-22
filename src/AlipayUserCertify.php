@@ -374,7 +374,7 @@ class AlipayUserCertify
         // $obj = $aop->execute ( $request); 
 
         $request->setBizContent(json_encode($bizCon,true));
-        $obj = $aop->pageExecute( $request,'GET'); 
+        $obj = $aop->sdkExecute($request); 
 
         return $obj;
 
