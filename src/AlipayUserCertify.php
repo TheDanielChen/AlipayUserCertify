@@ -370,17 +370,14 @@ class AlipayUserCertify
         ];
 
 
+        // $request->setBizContent(json_encode($bizCon,true));
+        // $obj = $aop->execute ( $request); 
+
         $request->setBizContent(json_encode($bizCon,true));
-        $obj = $aop->execute ( $request); 
+        $obj = $aop->pageExecute( $request,'GET'); 
 
-        // $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
+        return $obj;
 
-        if($obj->body){
-            return $obj->body;
-
-        }
-
-        return null;
     }
 
     // 授权转支付
