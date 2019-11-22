@@ -7,7 +7,7 @@ use Cstopery\AlipayUserCertify\Libarys\Zmop\ZmopClient;
 use Cstopery\AlipayUserCertify\Libarys\Zmop\AopClient;
 
 // use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaCreditScoreGetRequest;
-//use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaAuthInfoAuthorizeRequest;
+// use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaAuthInfoAuthorizeRequest;
 // use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaCreditWatchlistiiGetRequest;
 // use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaCreditAntifraudScoreGetRequest;
 // use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\ZhimaCreditAntifraudVerifyRequest;
@@ -17,7 +17,7 @@ use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayUserCertifyOpenInitial
 use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayUserCertifyOpenCertifyRequest;
 use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayFundAuthOrderAppFreezeRequest;
 use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayTradePayRequest;
-use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayTradeAppPayRequest;
+// use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayTradeAppPayRequest;
 
 
 class AlipayUserCertify
@@ -316,17 +316,6 @@ class AlipayUserCertify
 
         return null;
 
-
-
-        // foreach ($obj as $paraKey => $paraValue) {
-		// 	//如果属性名以_reponse结尾，该属性对应的值为业务返回值
-		// 	if(strrchr($paraKey, "_response") == "_response"){
-		// 		return $paraValue;
-		// 	}
-		// }
-
-
-
         $client = new ZmopClient($config["gatewayUrl"],$config["appId"],$config["charset"],$config["privateKeyFile"],$config["zmPublicKeyFile"]);
         $request = new AlipayUserCertifyOpenCertifyRequest();
         // $request->setChannel("apppc");
@@ -342,7 +331,6 @@ class AlipayUserCertify
 
         $config=Config::get("AlipayUserCertify.AlipayUserCertify");
 
-        // var_dump($config);
         $aop = new AopClient();
         $aop->gatewayUrl = $config["gatewayUrl"];
         $aop->appId = $config["appId"];
@@ -369,9 +357,6 @@ class AlipayUserCertify
 
         ];
 
-
-        // $request->setBizContent(json_encode($bizCon,true));
-        // $obj = $aop->execute ( $request); 
 
         $request->setBizContent(json_encode($bizCon,true));
         $obj = $aop->sdkExecute($request); 
@@ -432,58 +417,58 @@ class AlipayUserCertify
     }
 
     //先支付后签约场景
-    public function AlipayTradeAppPay($order_no,$total_price){
-        $config=Config::get("AlipayUserCertify.AlipayUserCertify");
+    // public function AlipayTradeAppPay($order_no,$total_price){
+    //     $config=Config::get("AlipayUserCertify.AlipayUserCertify");
 
-        // var_dump($config);
-        $aop = new AopClient();
-        $aop->gatewayUrl = $config["gatewayUrl"];
-        $aop->appId = $config["appId"];
-        $aop->rsaPrivateKey = file_get_contents($config["privateKeyFile"]);
-        $aop->alipayrsaPublicKey=file_get_contents($config["zmPublicKeyFile"]);
-        $aop->apiVersion = '1.0';
-        $aop->signType = 'RSA2';
-        $aop->postCharset=$config["charset"];
-        $aop->format='json';
-        $aop->notify_url = $config["agreement_notify_url"];
+    //     // var_dump($config);
+    //     $aop = new AopClient();
+    //     $aop->gatewayUrl = $config["gatewayUrl"];
+    //     $aop->appId = $config["appId"];
+    //     $aop->rsaPrivateKey = file_get_contents($config["privateKeyFile"]);
+    //     $aop->alipayrsaPublicKey=file_get_contents($config["zmPublicKeyFile"]);
+    //     $aop->apiVersion = '1.0';
+    //     $aop->signType = 'RSA2';
+    //     $aop->postCharset=$config["charset"];
+    //     $aop->format='json';
+    //     $aop->notify_url = $config["agreement_notify_url"];
 
 
-        $request = new AlipayTradeAppPayRequest();
+    //     $request = new AlipayTradeAppPayRequest();
 
-        $bizCon = [
+    //     $bizCon = [
 
-            'out_trade_no'          =>  $order_no,  //商户订单号
-            'total_amount'          =>  $total_price,  //预授权金额
-            'product_code'          =>  'QUICK_MSECURITY_PAY', //固定
-            'subject'               =>  '先支付后签约',        
-            'agreement_sign_params' =>[
-                    'personal_product_code' => 'CYCLE_PAY_AUTH_P',
-                    'sign_scene'    => 'INDUSTRY|CARRENTAL',
-                    'external_agreement_no' => $order_no,
-                    'access_params' => [
-                            'channel' => 'ALIPAYAPP'
-                    ],
-                    'period_rule_params' => [
-                            'period_type' => 'MONTH',
-                            'period' => 1,
+    //         'out_trade_no'          =>  $order_no,  //商户订单号
+    //         'total_amount'          =>  $total_price,  //预授权金额
+    //         'product_code'          =>  'QUICK_MSECURITY_PAY', //固定
+    //         'subject'               =>  '先支付后签约',        
+    //         'agreement_sign_params' =>[
+    //                 'personal_product_code' => 'CYCLE_PAY_AUTH_P',
+    //                 'sign_scene'    => 'INDUSTRY|CARRENTAL',
+    //                 'external_agreement_no' => $order_no,
+    //                 'access_params' => [
+    //                         'channel' => 'ALIPAYAPP'
+    //                 ],
+    //                 'period_rule_params' => [
+    //                         'period_type' => 'MONTH',
+    //                         'period' => 1,
 
-                    ],
-            ],
+    //                 ],
+    //         ],
 
-        ];
+    //     ];
 
-        $request->setBizContent(json_encode($bizCon,true));
-        $obj = $aop->execute ( $request); 
+    //     $request->setBizContent(json_encode($bizCon,true));
+    //     $obj = $aop->execute ( $request); 
 
-        $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
+    //     $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
 
-        if($obj->$responseNode){
-            return $obj->$responseNode;
+    //     if($obj->$responseNode){
+    //         return $obj->$responseNode;
 
-        }
+    //     }
 
-        return null;
-    }
+    //     return null;
+    // }
 
 
 }
