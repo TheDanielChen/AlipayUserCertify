@@ -432,7 +432,7 @@ class AlipayUserCertify
     }
 
     //先支付后签约场景
-    public function AlipayTradeAppPay($order_no,$total_price,){
+    public function AlipayTradeAppPay($order_no,$total_price){
         $config=Config::get("AlipayUserCertify.AlipayUserCertify");
 
         // var_dump($config);
