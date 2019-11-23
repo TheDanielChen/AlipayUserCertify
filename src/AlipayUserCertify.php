@@ -387,12 +387,12 @@ class AlipayUserCertify
 
         $bizCon = [
 
-            'out_order_no'          =>  $order_no,  //商户订单号
+            'out_trade_no'          =>  $order_no.rand(100,999),  //商户订单号
             'total_amount'          =>  $total_price,  //预授权金额
             'product_code'          =>  'PRE_AUTH_ONLINE', //固定
             'subject'               =>  '预授权转支付',        
             'buyer_id'              =>  $buyer_id,  
-            'seller_id'             =>  $config['appId'], //固定
+            'seller_id'             =>  $config['pid'], //固定
             'auth_no'               =>  $auth_no,
             'body'                  =>  '预授权转支付',
             //'auth_confirm_mode'     =>  'COMPLETE',  //auth_confirm_mode传入COMPLETE，无需调用解冻接口，支付宝端在扣款成功后会自动解冻剩余金额
