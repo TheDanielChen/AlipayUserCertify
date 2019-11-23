@@ -340,7 +340,7 @@ class AlipayUserCertify
         $aop->signType = 'RSA2';
         $aop->postCharset=$config["charset"];
         $aop->format='json';
-        $aop->notify_url = $config["freeze_notify_url"];
+        $aop->notifyUrl = $config["freeze_notify_url"];  // 注意这里要传 notifyUrl
 
         $request = new AlipayFundAuthOrderAppFreezeRequest();
 
