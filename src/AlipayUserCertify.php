@@ -16,6 +16,7 @@ use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayUserCertifyOpenQueryRe
 use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayUserCertifyOpenInitializeRequest;
 use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayUserCertifyOpenCertifyRequest;
 use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayFundAuthOrderAppFreezeRequest;
+use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayFundAuthOrderUnfreezeRequest;
 use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayTradePayRequest;
 // use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayTradeAppPayRequest;
 
@@ -415,6 +416,53 @@ class AlipayUserCertify
 
         return null;
 
+
+    }
+
+        // 支付宝预授权解冻
+    public function AlipayFundAuthOrderUnFreeze($order_no,$auth_no,$total_price,$auth_mode=''){
+
+        $config=Config::get("AlipayUserCertify.AlipayUserCertify");
+
+        $aop = new AopClient();
+        $aop->gatewayUrl = $config["gatewayUrl"];
+        $aop->appId = $config["appId"];
+        $aop->rsaPrivateKey = file_get_contents($config["privateKeyFile"]);
+        $aop->alipayrsaPublicKey=file_get_contents($config["zmPublicKeyFile"]);
+        $aop->apiVersion = '1.0';
+        $aop->signType = 'RSA2';
+        $aop->postCharset=$config["charset"];
+        $aop->format='json';
+        // $aop->notifyUrl = $config["freeze_notify_url"];  // 注意这里要传 notifyUrl
+
+        $request = new AlipayFundAuthOrderUnfreezeRequest();
+
+        $bizCon = [
+
+            'auth_no'          =>  $auth_no,  //授权单号
+            'out_request_no'        =>  $order_no.rand(100,999),  //请求流水号
+            'remark'           =>  '预授权解冻',        
+            'amount'                =>  $total_price,  //解冻预授权金额  
+
+        ];
+
+        if($auth_mode == 'CREDIT_AUTH'){//若订单为信用全免订单，extraParam必须传入
+            $bizCon['extra_param'] => ['unfreezeBizInfo'=>['bizComplete'=>'true']],
+        }
+
+        // $request->setNotifyUrl($config["freeze_notify_url"]);
+
+        $request->setBizContent(json_encode($bizCon,true));
+        $obj = $aop->execute ( $request); 
+
+        $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
+
+        if($obj->$responseNode){
+            return $obj->$responseNode;
+
+        }
+
+        return null;
 
     }
 
