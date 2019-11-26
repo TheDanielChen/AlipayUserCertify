@@ -441,14 +441,14 @@ class AlipayUserCertify
         $bizCon = [
 
             'auth_no'          =>  $auth_no,  //授权单号
-            'out_request_no'        =>  $order_no.rand(100,999),  //请求流水号
+            'out_request_no'        =>  $order_no,  //请求流水号
             'remark'           =>  '预授权解冻',        
             'amount'                =>  $total_price,  //解冻预授权金额  
 
         ];
 
         if($auth_mode == 'CREDIT_AUTH'){//若订单为信用全免订单，extraParam必须传入
-            $bizCon['extra_param'] = ['unfreezeBizInfo'=>['bizComplete'=>'true']];
+            $bizCon['extra_param'] = '{\"unfreezeBizInfo\":\"{\\\"bizComplete\\\":\\\"true\\\"}\"}';
         }
 
         // $request->setNotifyUrl($config["freeze_notify_url"]);
