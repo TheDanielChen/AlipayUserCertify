@@ -453,7 +453,7 @@ class AlipayUserCertify
 
         // $request->setNotifyUrl($config["freeze_notify_url"]);
 
-        $request->setBizContent(json_encode($bizCon,true));
+        $request->setBizContent(json_encode($bizCon,JSON_UNESCAPED_UNICODE));
         $obj = $aop->execute ( $request); 
 
         $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
