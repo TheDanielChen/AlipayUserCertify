@@ -448,7 +448,7 @@ class AlipayUserCertify
         ];
 
         if($auth_mode == 'CREDIT_AUTH'){//若订单为信用全免订单，extraParam必须传入
-            $bizCon['extra_param'] = '{\"unfreezeBizInfo\":\"{\\\"bizComplete\\\":\\\"true\\\"}\"}';
+            $bizCon['extra_param'] = '{"unfreezeBizInfo":"{"bizComplete":"true"}"}';
         }
 
         // $request->setNotifyUrl($config["freeze_notify_url"]);
