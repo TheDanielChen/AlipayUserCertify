@@ -448,14 +448,12 @@ class AlipayUserCertify
         ];
 
         if($auth_mode == 'CREDIT_AUTH'){//若订单为信用全免订单，extraParam必须传入
-            // $bizCon['extra_param'] = '{"unfreezeBizInfo":"{"bizComplete":"true"}"}';
-             $bizCon['extra_param'] = ['unfreezeBizInfo'=>['bizComplete'=>'true']];
-
+            $bizCon['extra_param'] = '{\"unfreezeBizInfo\":\"{\\\"bizComplete\\\":\\\"true\\\"}\"}';
         }
 
         // $request->setNotifyUrl($config["freeze_notify_url"]);
 
-        $request->setBizContent(json_encode($bizCon,JSON_UNESCAPED_UNICODE));
+        $request->setBizContent(json_encode($bizCon,JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE));
         $obj = $aop->execute ( $request); 
 
         $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
