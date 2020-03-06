@@ -19,6 +19,8 @@ use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayFundAuthOrderAppFreeze
 use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayFundAuthOrderUnfreezeRequest;
 use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayFundAuthOperationDetailQueryRequest;
 use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayTradePayRequest;
+use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayTradeAppPayRequest;
+
 // use Cstopery\AlipayUserCertify\Libarys\Zmop\Request\AlipayTradeAppPayRequest;
 
 
@@ -355,7 +357,7 @@ class AlipayUserCertify
             'product_code'          =>  'PRE_AUTH_ONLINE', //固定
             //'payee_logon_id'        =>  '15307124426',
             'payee_user_id'         =>  $config['pid'],  // payee_user_id  请传入  appid对应的pid
-            'extra_param'           => '{"category":"TRAD_RENT_CAR"}',
+            'extra_param'           => '{"category":"TRAD_RENT_CAR","serviceId":"2019123000000000000004731700"}',
 
         ];
 
@@ -417,6 +419,46 @@ class AlipayUserCertify
 
         return null;
 
+
+    }
+
+    // 花呗支付
+    public function AlipayTradeAppPay($order_no,$total_price,$hb_fq_num=3,$hb_fq_seller_percent=0){
+
+        $config=Config::get("AlipayUserCertify.AlipayUserCertify");
+
+        $aop = new AopClient();
+        $aop->gatewayUrl = $config["gatewayUrl"];
+        $aop->appId = $config["appId"];
+        $aop->rsaPrivateKey = file_get_contents($config["privateKeyFile"]);
+        $aop->alipayrsaPublicKey=file_get_contents($config["zmPublicKeyFile"]);
+        $aop->apiVersion = '1.0';
+        $aop->signType = 'RSA2';
+        $aop->postCharset=$config["charset"];
+        $aop->format='json';
+        $aop->notify_url = $config["huabei_notify_url"];
+
+        $request = new AlipayTradeAppPayRequest();
+
+        $bizCon = [
+
+            'out_trade_no'          =>  $order_no,  //商户订单号
+            'total_amount'          =>  $total_price,  //金额
+            'subject'               =>  '回购支付',        
+            'extend_params'         =>  "{\"hb_fq_num\":\"$hb_fq_num\",\"hb_fq_seller_percent\":\"$hb_fq_seller_percent\"}",  
+
+        ];
+
+        $request->setBizContent(json_encode($bizCon,true));
+        $obj = $aop->execute( $request ); 
+
+        $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
+
+        if($obj->$responseNode){
+            return $obj->$responseNode;
+        }
+
+        return null;
 
     }
 

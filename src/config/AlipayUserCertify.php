@@ -12,6 +12,7 @@ return [
         //芝麻分配给商户的 appId
         "appId" => "1000000",
         "authReturnUrl"=>"https://www.iqizu.cn",
+        "huabei_notify_url" => "https://www.1.cn",
     ],
 
     // 欺诈验证
