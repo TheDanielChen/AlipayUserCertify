@@ -357,7 +357,7 @@ class AlipayUserCertify
             'product_code'          =>  'PRE_AUTH_ONLINE', //固定
             //'payee_logon_id'        =>  '15307124426',
             'payee_user_id'         =>  $config['pid'],  // payee_user_id  请传入  appid对应的pid
-            'extra_param'           => '{"category":"TRAD_RENT_CAR","serviceId":"2019123000000000000004731700"}',
+            'extra_param'           => '{"category":"RENT_CAR_GOODS","serviceId":"2019123000000000000004731700"}',
 
         ];
 
